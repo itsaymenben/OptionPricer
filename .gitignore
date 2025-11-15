@@ -17,3 +17,6 @@ env/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Debug
+debug.log

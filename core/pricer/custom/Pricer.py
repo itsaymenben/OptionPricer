@@ -8,8 +8,8 @@ class Pricer:
                  **kwargs):
         if not isinstance(method, str):
             raise TypeError(f"'method' argument should be of {str} type.")
-        if not method in configData["Methods"]:
-            raise KeyError(f"'method' should be in {configData["Methods"]}")
+        if not method in configData["methods"]:
+            raise KeyError(f"'method' should be in {configData["methods"]}")
         if method == "BinomialTree":
             self.pricer = BinomialTreePricer(**kwargs)
         elif method == "BlackScholesMerton":

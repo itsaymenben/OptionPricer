@@ -53,8 +53,8 @@ class BasePricer:
 
         if not isinstance(self.asset_type, str):
             raise TypeError(f"'asset_type' must be of type {str}.")
-        if self.asset_type not in configData["AssetTypes"]:
-            raise KeyError(f"'asset_type' used should be in {configData["AssetTypes"]}")
+        if self.asset_type not in configData["assettypes"]:
+            raise KeyError(f"'asset_type' used should be in {configData["assettypes"]}")
 
         if not isinstance(self.european_option, bool):
             raise TypeError(f"'european_option' must be of type {bool}.")
