@@ -1,0 +1,19 @@
+# Notebooks
+/notebooks
+
+# Pycache
+__pycache__/
+
+# Vscode
+/.vscode
+
+# Local Files
+/core/config/configWriter.py
+
+# Environment
+.env
+.venv
+env/
+
+# Streamlit
+.streamlit/secrets.toml
