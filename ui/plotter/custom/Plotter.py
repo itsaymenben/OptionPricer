@@ -1,8 +1,8 @@
 from core.config.configFile import configData
-from core.pricer.custom.BinomialTree import BinomialTreePricer
-from core.pricer.custom.BlackScholesMerton import BlackScholesMertonPricer
+from ui.plotter.custom.BinomialTree import BinomialTreePlotter
+# from ui.plotter.custom.BlackScholesMerton import BlackScholesMertonPlotter
 
-class Pricer:
+class Plotter:
     def __init__(self,
                  method: str,
                  *args,
@@ -12,9 +12,10 @@ class Pricer:
         if not method in configData["methods"]:
             raise KeyError(f"'method' should be in {configData["methods"]}")
         if method == "BinomialTree":
-            self.pricer = BinomialTreePricer(*args, **kwargs)
+            self.plotter = BinomialTreePlotter(*args, **kwargs)
         elif method == "BlackScholesMerton":
-            self.pricer = BlackScholesMertonPricer(*args, **kwargs)
+            # self.plotter = BlackScholesMertonPlotter(*args, **kwargs)
+            pass
 
-    def run(self):
-        return self.pricer.run()
+    def generate_plot(self):
+        return self.plotter.generate_plot()

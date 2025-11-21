@@ -11,9 +11,9 @@ class BinomialTreePricer(BasePricer):
                                      / (self.percentage_increase - self.percentage_decrease))
 
     def run(self):
-        asset_prices = self._compute_asset_prices()
-        options_prices = self._compute_option_prices(asset_prices)
-        return asset_prices, options_prices
+        self.asset_prices = self._compute_asset_prices()
+        self.option_prices = self._compute_option_prices(self.asset_prices)
+        return self.asset_prices, self.option_prices
 
     def _compute_risk_free_adjustment(self):
         if self.asset_type in ["Stock", "Index"]:
