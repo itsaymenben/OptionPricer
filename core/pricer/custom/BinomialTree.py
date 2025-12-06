@@ -50,9 +50,9 @@ class BinomialTreePricer(BasePricer):
                     f_expected = self._compute_discounted_price_expectation(option_prices[-1][j],
                                                                              option_prices[-1][j + 1])
                     if self.european_option:
-                        f_payoff = max(call_option_coeff * (price - self.strike_price), 0)
-                    else:
                         f_payoff = f_expected
+                    else:
+                        f_payoff = max(call_option_coeff * (price - self.strike_price), 0)
                     f = max(f_expected, f_payoff)
                     current_option_prices.append(round(f, 4))
             option_prices.append(current_option_prices)

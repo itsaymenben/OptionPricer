@@ -17,7 +17,7 @@ class BinomialTreePlotter(BasePlotter):
         x = [i for (i, _, _) in self.asset_prices_nodes]
         y_asset_prices = [j - i / 2 + self.NODE_OFFSET for (i, j, _) in self.asset_prices_nodes]
         y_option_price = [j - i / 2 - self.NODE_OFFSET for (i, j, _) in self.asset_prices_nodes]
-        text = [f"Step {i}<br>Up {j}<br>S={S:.2f}" for (i, j, S) in self.asset_prices_nodes]
+        text = [f"Step {i}<br>Up {j}<br>S={S:.4f}" for (i, j, S) in self.asset_prices_nodes]
 
         # Create edges for Plotly
         edge_x = []
@@ -45,7 +45,7 @@ class BinomialTreePlotter(BasePlotter):
         fig.add_trace(go.Scatter(
             x=x, y=y_asset_prices,
             mode='text',
-            text=[f"{S:.2f}" for (_, _, S) in self.asset_prices_nodes],
+            text=[f"{S:.4f}" for (_, _, S) in self.asset_prices_nodes],
             textposition='middle center',
             hovertext=text,
             hoverinfo='text',
@@ -56,7 +56,7 @@ class BinomialTreePlotter(BasePlotter):
         fig.add_trace(go.Scatter(
             x=x, y=y_option_price,
             mode='text',
-            text=[f"{S:.2f}" for (_, _, S) in self.option_prices_nodes],
+            text=[f"{S:.4f}" for (_, _, S) in self.option_prices_nodes],
             textposition='middle center',
             hovertext=text,
             hoverinfo='text',

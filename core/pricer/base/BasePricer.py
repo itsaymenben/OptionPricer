@@ -48,9 +48,6 @@ class BasePricer:
         if not isinstance(self.foreign_risk_free_rate, (int, float)):
             raise TypeError(f"'risk_free_rate' must be of type {float}.")
 
-        if self.dividend_yield and self.foreign_risk_free_rate:
-            raise ValueError("'dividend_yield' and 'foreign_risk_free_rate' cannot be both non zero.")
-
         if not isinstance(self.asset_type, str):
             raise TypeError(f"'asset_type' must be of type {str}.")
         if self.asset_type not in configData["assettypes"]:

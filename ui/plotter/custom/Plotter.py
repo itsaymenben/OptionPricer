@@ -1,6 +1,6 @@
 from core.config.configFile import configData
 from ui.plotter.custom.BinomialTree import BinomialTreePlotter
-# from ui.plotter.custom.BlackScholesMerton import BlackScholesMertonPlotter
+from ui.plotter.custom.BlackScholesMerton import BlackScholesMertonPlotter
 
 class Plotter:
     def __init__(self,
@@ -14,8 +14,7 @@ class Plotter:
         if method == "BinomialTree":
             self.plotter = BinomialTreePlotter(*args, **kwargs)
         elif method == "BlackScholesMerton":
-            # self.plotter = BlackScholesMertonPlotter(*args, **kwargs)
-            pass
+            self.plotter = BlackScholesMertonPlotter(*args, **kwargs)
 
     def generate_plot(self):
         return self.plotter.generate_plot()
