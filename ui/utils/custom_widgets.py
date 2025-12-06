@@ -25,10 +25,9 @@ class SliderNumberInput:
         self.step = step
         self.key = key
 
-
     def create_widget(self):
         self.value = st.slider(self.label, min_value=self.min_value, max_value=self.max_value, value=self.value, key=f'{self.key}_slider', on_change=self.update_num_input)
-        self.value = st.number_input(self.label, min_value=self.min_value, value=self.value, step=self.step, label_visibility="collapsed", on_change=self.update_slider, key=f'{self.key}_num_input')
+        self.value = st.number_input(self.label, min_value=self.min_value, value=self.value, step=self.step, key=f'{self.key}_num_input', on_change=self.update_slider, label_visibility="collapsed")
         return self.value
 
     def update_slider(self):
