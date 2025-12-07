@@ -31,7 +31,7 @@ def set_params():
         st.session_state.params["risk_free_rate"] = slider_with_number_input("Risk Free Rate (%)", key="risk_free_rate", min_value=0.0, max_value=100.0, value=5.0, step=1.0) / 100
         if st.session_state.params["asset_type"] == "Currency":
             st.session_state.params["foreign_risk_free_rate"] = slider_with_number_input("Foreign Risk Free Rate (%)", key="foreign_risk_free_rate", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
-        else:
+        elif st.session_state.params["asset_type"] in ["Stock", "Index"]:
             st.session_state.params["dividend_yield"] = slider_with_number_input("Dividend Yield (%)", key="dividend_yield", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
         st.session_state.params["european_option"] = st.radio(
                                                 "Option Exercise Style",

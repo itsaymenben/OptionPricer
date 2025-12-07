@@ -70,10 +70,13 @@ class BinomialTreePlotter(BasePlotter):
             yaxis=dict(visible=False),
             plot_bgcolor=None,
             margin=dict(l=0, r=0, t=50, b=0),
-            height=max(60 * self.n_steps, 600),
-            width=max(120 * self.n_steps, 1450),
+            height=700,
+            width=1450,
             shapes=shapes,
         )
+
+        fig.update_xaxes(range=[-0.5, 5.5])
+        fig.update_yaxes(range=[-3, 3])
         return fig
 
     def _build_nodes_and_edges(self):

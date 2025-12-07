@@ -21,7 +21,7 @@ class BlackScholesMertonPricer(BasePricer):
             return self.dividend_yield
         if self.asset_type == "Currency":
             return self.foreign_risk_free_rate
-        return 0
+        return self.risk_free_rate  # asset_type = 'Future'
 
     def _compute_call_price(self, d1, d2):
         return self.start_price * np.exp(- self.asset_yield * self.time_to_maturity) * norm.cdf(d1) - self.strike_price * np.exp(- self.risk_free_rate * self.time_to_maturity) * norm.cdf(d2)
