@@ -57,5 +57,6 @@ if st.session_state.params["method"] == "BinomialTree":
 
 elif st.session_state.params["method"] == "BlackScholesMerton":
     plotter = Plotter(method=st.session_state.params["method"],
+                      asset_type=st.session_state.params["asset_type"],
                       results=results)
     plotter.explain()
