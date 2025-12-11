@@ -5,3 +5,6 @@ class BasePlotter:
 
     def generate_plot(self):
         raise NotImplementedError("Method not implemented yet.")
+
+    def explain(self):
+        raise NotImplementedError("Method not implemented yet.")

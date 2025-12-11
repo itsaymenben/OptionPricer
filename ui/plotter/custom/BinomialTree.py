@@ -1,4 +1,5 @@
 import plotly.graph_objects as go
+import streamlit as st
 from ui.plotter.base.BasePlotter import BasePlotter
 
 class BinomialTreePlotter(BasePlotter):
@@ -12,7 +13,19 @@ class BinomialTreePlotter(BasePlotter):
         self.n_steps = n_steps
         self._build_nodes_and_edges()
 
+    def explain(self):
+        price = self.option_prices[0][0]
+        st.write(f"The Binomial Tree Model gives the price:\n")
+        _, _, col3, _, _ = st.columns(5)
+        with col3:
+            if st.session_state.params["call_option"]: 
+                    st.success(f"**CALL Value**\n\n{round(price, 4)}€")
+            else:
+                st.error(f"**PUT Value**\n\n{round(price, 4)}€")
+
     def generate_plot(self):
+        if self.n_steps > 5:
+            st.info("You can use the Pan/Autoscale tools from Plotly to see the whole tree.")
         # Convert nodes to coordinates
         x = [i for (i, _, _) in self.asset_prices_nodes]
         y_asset_prices = [j - i / 2 + self.NODE_OFFSET for (i, j, _) in self.asset_prices_nodes]

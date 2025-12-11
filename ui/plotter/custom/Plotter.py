@@ -18,3 +18,6 @@ class Plotter:
 
     def generate_plot(self):
         return self.plotter.generate_plot()
+
+    def explain(self):
+        return self.plotter.explain()

@@ -4,13 +4,13 @@ class BasePricer:
     def __init__(self,
                  start_price: float,                    # S0
                  time_to_maturity: float,               # T
-                 n_steps: int,                          # n
                  volatility: float,                     # sigma
                  risk_free_rate: float,                 # r
                  asset_type: str,
                  european_option: bool,
                  call_option: bool,
                  strike_price: float,                   # K
+                 n_steps: int = 1,                      # n
                  dividend_yield: float = 0,             # q
                  foreign_risk_free_rate: float = 0,     # rf
                  ):

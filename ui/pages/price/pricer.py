@@ -33,10 +33,13 @@ def set_params():
             st.session_state.params["foreign_risk_free_rate"] = slider_with_number_input("Foreign Risk Free Rate (%)", key="foreign_risk_free_rate", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
         elif st.session_state.params["asset_type"] in ["Stock", "Index"]:
             st.session_state.params["dividend_yield"] = slider_with_number_input("Dividend Yield (%)", key="dividend_yield", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
-        st.session_state.params["european_option"] = st.radio(
-                                                "Option Exercise Style",
-                                                ["European", "American"],
-                                            ) == "European"
+        if st.session_state.params["method"] == "BinomialTree":
+            st.session_state.params["european_option"] = st.radio(
+                                                    "Option Exercise Style",
+                                                    ["European", "American"],
+                                                ) == "European"
+        else:
+            st.session_state.params["european_option"] = True
         st.session_state.params["call_option"] = st.radio(
                                                 "Option Payoff Type",
                                                 ["Call", "Put"],
@@ -45,13 +48,14 @@ set_params()
 pricer = Pricer(**st.session_state.params)
 results = pricer.run()
 if st.session_state.params["method"] == "BinomialTree":
-    asset_prices, option_prices = results
     plotter = Plotter(method=st.session_state.params["method"],
                       n_steps=st.session_state.params["n_steps"],
                       results=results)
+    plotter.explain()
     fig = plotter.generate_plot()
     st.plotly_chart(fig, width="stretch")
 
 elif st.session_state.params["method"] == "BlackScholesMerton":
-    price = results
-    st.write(f"The price given the Black-Scholes-Method Model is {round(price, 4)}")
+    plotter = Plotter(method=st.session_state.params["method"],
+                      results=results)
+    plotter.explain()

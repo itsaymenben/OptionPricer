@@ -6,7 +6,7 @@ pages = {
     "Home": [
         st.Page("pages/home/home.py", title="Home", icon=":material/home:"),
     ],
-    "Pricing": [
+    "Pricing Models": [
         st.Page(
             "pages/price/pricer.py",
             title="Option Pricer",
