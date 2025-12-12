@@ -18,3 +18,6 @@ class Pricer:
 
     def run(self):
         return self.pricer.run()
+
+    def compute_implied_volatility(self, option_price):
+        return self.pricer.compute_implied_volatility(option_price)

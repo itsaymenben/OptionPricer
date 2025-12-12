@@ -13,6 +13,8 @@ class BasePricer:
                  n_steps: int = 1,                      # n
                  dividend_yield: float = 0,             # q
                  foreign_risk_free_rate: float = 0,     # rf
+                 *args,
+                 **kwargs,
                  ):
 
         self.start_price = start_price
@@ -65,4 +67,7 @@ class BasePricer:
         self.timestep = self.time_to_maturity / self.n_steps
 
     def run(self):
+        raise NotImplementedError("Method not implemented yet.")
+
+    def compute_implied_volatility(self, option_price):
         raise NotImplementedError("Method not implemented yet.")

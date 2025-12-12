@@ -13,15 +13,16 @@ class BinomialTreePlotter(BasePlotter):
         self.n_steps = n_steps
         self._build_nodes_and_edges()
 
-    def explain(self):
-        price = self.option_prices[0][0]
-        st.write(f"The Binomial Tree Model gives the price:\n")
-        _, _, col3, _, _ = st.columns(5)
-        with col3:
-            if st.session_state.params["call_option"]: 
-                    st.success(f"**CALL Value**\n\n{round(price, 4)}€")
-            else:
-                st.error(f"**PUT Value**\n\n{round(price, 4)}€")
+    def explain(self, type: str):
+        if type == "OptionPricer":
+            price = self.option_prices[0][0]
+            st.write(f"The Binomial Tree Model gives the price:\n")
+            _, _, col3, _, _ = st.columns(5)
+            with col3:
+                if st.session_state.params["call_option"]: 
+                        st.success(f"**CALL Value**\n\n{round(price, 4)}€")
+                else:
+                    st.error(f"**PUT Value**\n\n{round(price, 4)}€")
 
     def generate_plot(self):
         if self.n_steps > 5:

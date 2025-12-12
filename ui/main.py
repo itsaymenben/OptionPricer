@@ -8,9 +8,15 @@ pages = {
     ],
     "Pricing Models": [
         st.Page(
-            "pages/price/pricer.py",
+            "pages/price/Pricer.py",
             title="Option Pricer",
             url_path="option_pricer",
+            icon=":material/analytics:"
+        ),
+        st.Page(
+            "pages/price/ImpliedVol.py",
+            title="Implied Volatility",
+            url_path="implied_volatility",
             icon=":material/analytics:"
         ),
     ],

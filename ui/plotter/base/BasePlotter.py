@@ -1,10 +1,12 @@
 class BasePlotter:
     def __init__(self,
-                 results):
+                 results,
+                 volatility):
         self.results = results
+        self.volatility = volatility
 
     def generate_plot(self):
         raise NotImplementedError("Method not implemented yet.")
 
-    def explain(self):
+    def explain(self, type: str):
         raise NotImplementedError("Method not implemented yet.")

@@ -15,6 +15,9 @@ class BinomialTreePricer(BasePricer):
         self.option_prices = self._compute_option_prices(self.asset_prices)
         return self.asset_prices, self.option_prices
 
+    def compute_implied_volatility(self, option_price):
+        super().compute_implied_volatility(option_price)
+
     def _compute_risk_free_adjustment(self):
         if self.asset_type in ["Stock", "Index"]:
             return np.exp((self.risk_free_rate - self.dividend_yield) * self.timestep)
