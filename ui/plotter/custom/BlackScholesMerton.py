@@ -43,10 +43,10 @@ class BlackScholesMertonPlotter(BasePlotter):
                         p = K e^{- r T} N(- d_2) - S_0 e^{- %s T} N(- d_1)
                         """%(asset_yield))
             st.latex(r"""
-                    d_1 = \frac{\ln{\frac{S_0}{K}} + (r - %s + \sigma^2)T}{\sigma\sqrt{T}}
+                    d_1 = \frac{\ln{\frac{S_0}{K}} + (r - %s + \frac{1}{2} \sigma^2)T}{\sigma\sqrt{T}}
                     """%(asset_yield))
             st.latex(r"""
-                    d_2 = \frac{\ln{\frac{S_0}{K}} + (r - %s - \sigma^2)T}{\sigma\sqrt{T}} = d_1 - \sigma\sqrt{T}
+                    d_2 = \frac{\ln{\frac{S_0}{K}} + (r - %s - \frac{1}{2} \sigma^2)T}{\sigma\sqrt{T}} = d_1 - \sigma\sqrt{T}
                     """%(asset_yield))
         elif type == "ImpliedVol":
             st.write(f"The Black-Scholes-Method Model gives the price:\n")
