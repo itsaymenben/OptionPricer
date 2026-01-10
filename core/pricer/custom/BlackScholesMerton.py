@@ -41,7 +41,8 @@ class BlackScholesMertonPricer(BasePricer):
                                    self.asset_yield,
                                    self.volatility,
                                    self.time_to_maturity,
-                                   self.call_option)
+                                   self.call_option,
+                                   self.asset_type)
         price = self._compute_price(self.start_price,
                                    self.strike_price,
                                    self.risk_free_rate,
@@ -157,14 +158,28 @@ class BlackScholesMertonPricer(BasePricer):
                        asset_yield,
                        volatility,
                        time_to_maturity,
-                       call_option):
+                       call_option,
+                       asset_type):
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
         d2 = d1 - volatility * np.sqrt(time_to_maturity)
-        rho_call = strike_price * time_to_maturity * np.exp(- risk_free_rate * time_to_maturity) * norm.cdf(d2)
-        rho_put = - strike_price * time_to_maturity * np.exp(- risk_free_rate * time_to_maturity) * norm.cdf(- d2)
-        return rho_call if call_option else rho_put
+        if asset_type not in ["Currency", "Future"]:
+            rho_call = strike_price * time_to_maturity * np.exp(- risk_free_rate * time_to_maturity) * norm.cdf(d2)
+            rho_put = - strike_price * time_to_maturity * np.exp(- risk_free_rate * time_to_maturity) * norm.cdf(- d2)
+            return rho_call if call_option else rho_put
+        elif asset_type == "Currency":
+            rho_call = - time_to_maturity * np.exp(- asset_yield * time_to_maturity) * start_price * norm.cdf(d1)
+            rho_put = time_to_maturity * np.exp(- asset_yield * time_to_maturity) * start_price * norm.cdf(- d1)
+            return rho_call if call_option else rho_put
+        option_price = self._compute_price(start_price,
+                                   strike_price,
+                                   risk_free_rate,
+                                   asset_yield,
+                                   volatility,
+                                   time_to_maturity,
+                                   call_option)
+        return - option_price * time_to_maturity
 
     def _compute_asset_yield(self):
         if self.asset_type in ["Stock", "Index"]:
