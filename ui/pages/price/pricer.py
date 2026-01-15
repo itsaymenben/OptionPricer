@@ -1,5 +1,4 @@
 import streamlit as st
-import plotly.graph_objects as go
 from core.pricer.custom.Pricer import Pricer
 from core.config.configFile import configData
 from ui.plotter.custom.Plotter import Plotter 
@@ -26,7 +25,7 @@ def set_params():
         time_to_maturity_granularity_key = st.selectbox("Time to Maturity Granularity", time_to_maturity_granularity.keys())
         st.session_state.params["time_to_maturity"] = st.number_input("Time to Maturity", min_value=0.0, value=1.0, step=0.5) / time_to_maturity_granularity[time_to_maturity_granularity_key]
         if st.session_state.params["method"] == "BinomialTree":
-            st.session_state.params["n_steps"] = slider_with_number_input("Number of Steps", key="n_steps", min_value=0, max_value=30, value=2, step=1)
+            st.session_state.params["n_steps"] = slider_with_number_input("Number of Steps", key="n_steps", min_value=0, max_value=100, value=2, step=1)
         st.session_state.params["volatility"] = slider_with_number_input("Volatility (%)", key="volatility", min_value=0.0, max_value=300.0, value=10.0, step=1.0) / 100
         st.session_state.params["risk_free_rate"] = slider_with_number_input("Risk Free Rate (%)", key="risk_free_rate", min_value=0.0, max_value=100.0, value=5.0, step=1.0) / 100
         if st.session_state.params["asset_type"] == "Currency":
@@ -49,13 +48,15 @@ pricer = Pricer(**st.session_state.params)
 results = pricer.run()
 if st.session_state.params["method"] == "BinomialTree":
     plotter = Plotter(method=st.session_state.params["method"],
-                      n_steps=st.session_state.params["n_steps"],
-                      volatility=st.session_state.params["volatility"],
-                      results=results)
+                n_steps=st.session_state.params["n_steps"],
+                volatility=st.session_state.params["volatility"],
+                results=results)
     plotter.explain(type="OptionPricer")
-    fig = plotter.generate_plot()
-    st.plotly_chart(fig, width="stretch")
-
+    if st.session_state.params["n_steps"] <= 30:
+        fig = plotter.generate_plot()
+        st.plotly_chart(fig, width="stretch")
+    else:
+        st.info("Use a number of steps lower than 30 if the tree plot is needed.")
 elif st.session_state.params["method"] == "BlackScholesMerton":
     plotter = Plotter(method=st.session_state.params["method"],
                       asset_type=st.session_state.params["asset_type"],

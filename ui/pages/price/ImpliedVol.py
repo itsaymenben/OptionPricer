@@ -1,5 +1,4 @@
 import streamlit as st
-import plotly.graph_objects as go
 from core.pricer.custom.Pricer import Pricer
 from core.config.configFile import configData
 from ui.plotter.custom.Plotter import Plotter 
@@ -23,7 +22,7 @@ def set_params():
         st.session_state.params["asset_type"] = st.selectbox("Asset Category", configData["assettypes"])
         st.session_state.params["start_price"] = st.number_input("Current Asset Price", min_value=0.0, value=100.0)
         st.session_state.params["strike_price"] = st.number_input("Strike Price", min_value=0.0, value=100.0)
-        st.session_state.params["option_price"] = st.number_input("Current Option Price", min_value=0.0, value=1.0)
+        st.session_state.params["option_price"] = st.number_input("Current Option Price", min_value=0.0, value=1.0, format="%0.4f")
         st.session_state.params["volatility"] = 10.0 / 100
         time_to_maturity_granularity_key = st.selectbox("Time to Maturity Granularity", time_to_maturity_granularity.keys())
         st.session_state.params["time_to_maturity"] = st.number_input("Time to Maturity", min_value=0.0, value=1.0, step=0.5) / time_to_maturity_granularity[time_to_maturity_granularity_key]
