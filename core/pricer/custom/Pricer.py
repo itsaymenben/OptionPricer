@@ -1,5 +1,6 @@
 from core.config.configFile import configData
 from core.pricer.custom.BinomialTree import BinomialTreePricer
+from core.pricer.custom.TrinomialTree import TrinomialTreePricer
 from core.pricer.custom.BlackScholesMerton import BlackScholesMertonPricer
 
 class Pricer:
@@ -13,6 +14,8 @@ class Pricer:
             raise KeyError(f"'method' should be in {configData["methods"]}")
         if method == "BinomialTree":
             self.pricer = BinomialTreePricer(*args, **kwargs)
+        elif method == "TrinomialTree":
+            self.pricer = TrinomialTreePricer(*args, **kwargs)
         elif method == "BlackScholesMerton":
             self.pricer = BlackScholesMertonPricer(*args, **kwargs)
 

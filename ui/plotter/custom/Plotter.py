@@ -1,5 +1,6 @@
 from core.config.configFile import configData
 from ui.plotter.custom.BinomialTree import BinomialTreePlotter
+from ui.plotter.custom.TrinomialTree import TrinomialTreePlotter
 from ui.plotter.custom.BlackScholesMerton import BlackScholesMertonPlotter
 
 class Plotter:
@@ -13,6 +14,8 @@ class Plotter:
             raise KeyError(f"'method' should be in {configData["methods"]}")
         if method == "BinomialTree":
             self.plotter = BinomialTreePlotter(*args, **kwargs)
+        elif method == "TrinomialTree":
+            self.plotter = TrinomialTreePlotter(*args, **kwargs)
         elif method == "BlackScholesMerton":
             self.plotter = BlackScholesMertonPlotter(*args, **kwargs)
 

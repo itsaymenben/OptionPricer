@@ -41,20 +41,26 @@ The `Option Pricer` page computes the prices of an option based on different par
 - `Foreign Risk Free Rate`: In percentage %, necessary for currency pricing.
 - `Option Payoff Type`: Call or Put.
 
-### Binomial Trees
+### Binomial Trees & Trinomial Trees
 
-The `Binomial Tree` model could be chosen in the `Pricing Method` selection box. It adds two new parameters to adjust in addition to the ones mentioned before:
+The `Binomial Tree` and `Trinomial Tree` models could be chosen in the `Pricing Method` selection box. They add two new parameters to adjust in addition to the ones mentioned before:
 
 - `Number of Steps`: The steps of the tree model.
 - `Option Exercise Style`: American or European.
 
-The dashboard then displays the option price computed using the Binomial Tree model.
+The dashboard then displays the option price computed using the selected model.
 
 ![Binom Price](./assets/binom_tree_price.png)
 
 The dashboard also plots the tree.
 
+For the `Binomial Tree` Model:
+
 ![Binom Plot](./assets/binom_tree_plot.png)
+
+For the `Trinomial Tree` Model:
+
+![Trinom Plot](./assets/trinom_tree_plot.png)
 
 ### Black-Scholes Merton
 

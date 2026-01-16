@@ -24,7 +24,7 @@ def set_params():
         st.session_state.params["strike_price"] = st.number_input("Strike Price", min_value=0.0, value=100.0)
         time_to_maturity_granularity_key = st.selectbox("Time to Maturity Granularity", time_to_maturity_granularity.keys())
         st.session_state.params["time_to_maturity"] = st.number_input("Time to Maturity", min_value=0.0, value=1.0, step=0.5) / time_to_maturity_granularity[time_to_maturity_granularity_key]
-        if st.session_state.params["method"] == "BinomialTree":
+        if st.session_state.params["method"] in ["BinomialTree", "TrinomialTree"]:
             st.session_state.params["n_steps"] = slider_with_number_input("Number of Steps", key="n_steps", min_value=0, max_value=100, value=2, step=1)
         st.session_state.params["volatility"] = slider_with_number_input("Volatility (%)", key="volatility", min_value=0.0, max_value=300.0, value=10.0, step=1.0) / 100
         st.session_state.params["risk_free_rate"] = slider_with_number_input("Risk Free Rate (%)", key="risk_free_rate", min_value=0.0, max_value=100.0, value=5.0, step=1.0) / 100
@@ -32,7 +32,7 @@ def set_params():
             st.session_state.params["foreign_risk_free_rate"] = slider_with_number_input("Foreign Risk Free Rate (%)", key="foreign_risk_free_rate", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
         elif st.session_state.params["asset_type"] in ["Stock", "Index"]:
             st.session_state.params["dividend_yield"] = slider_with_number_input("Dividend Yield (%)", key="dividend_yield", min_value=0.0, max_value=100.0, value=0.0, step=1.0) / 100
-        if st.session_state.params["method"] == "BinomialTree":
+        if st.session_state.params["method"] in ["BinomialTree", "TrinomialTree"]:
             st.session_state.params["european_option"] = st.radio(
                                                     "Option Exercise Style",
                                                     ["European", "American"],
@@ -46,7 +46,7 @@ def set_params():
 set_params()
 pricer = Pricer(**st.session_state.params)
 results = pricer.run()
-if st.session_state.params["method"] == "BinomialTree":
+if st.session_state.params["method"] in ["BinomialTree", "TrinomialTree"]:
     plotter = Plotter(method=st.session_state.params["method"],
                 n_steps=st.session_state.params["n_steps"],
                 volatility=st.session_state.params["volatility"],
