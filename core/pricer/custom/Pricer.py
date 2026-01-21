@@ -1,6 +1,7 @@
 from core.config.configFile import configData
 from core.pricer.custom.BinomialTree import BinomialTreePricer
 from core.pricer.custom.TrinomialTree import TrinomialTreePricer
+from core.pricer.custom.FiniteDifference import FiniteDifference
 from core.pricer.custom.BlackScholesMerton import BlackScholesMertonPricer
 
 class Pricer:
@@ -16,6 +17,8 @@ class Pricer:
             self.pricer = BinomialTreePricer(*args, **kwargs)
         elif method == "TrinomialTree":
             self.pricer = TrinomialTreePricer(*args, **kwargs)
+        elif method == "FiniteDifference":
+            self.pricer = FiniteDifference(*args, **kwargs)
         elif method == "BlackScholesMerton":
             self.pricer = BlackScholesMertonPricer(*args, **kwargs)
 
