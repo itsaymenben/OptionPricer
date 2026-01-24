@@ -1,19 +1,20 @@
 import plotly.graph_objects as go
 import streamlit as st
 from ui.plotter.base.BasePlotter import BasePlotter
+from typing import List, Dict
 
 class BinomialTreePlotter(BasePlotter):
     NODE_WIDTH = 0.38
     NODE_HEIGHT = 0.28
     NODE_OFFSET = 0.15
 
-    def __init__(self, n_steps, *args, **kwargs):
+    def __init__(self, n_steps: int, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.asset_prices, self.option_prices = self.results
         self.n_steps = n_steps
         self._build_nodes_and_edges()
 
-    def explain(self, type: str):
+    def explain(self, type: str) -> None:
         if type == "OptionPricer":
             price = self.option_prices[0][0]
             st.write(f"The Binomial Tree Model gives the price:\n")
@@ -24,7 +25,7 @@ class BinomialTreePlotter(BasePlotter):
                 else:
                     st.error(f"**PUT Value**\n\n{round(price, 4)}€")
 
-    def generate_plot(self):
+    def generate_plot(self) -> go.Figure:
         if self.n_steps > 5:
             st.info("You can use the Pan/Autoscale tools from Plotly to see the whole tree.")
         # Convert nodes to coordinates
@@ -33,7 +34,7 @@ class BinomialTreePlotter(BasePlotter):
         y_option_price = [j - i / 2 - self.NODE_OFFSET for (i, j, _) in self.asset_prices_nodes]
         text = [f"Step {i}<br>Up {j}<br>S={S:.4f}" for (i, j, S) in self.asset_prices_nodes]
 
-        # Create edges for Plotly
+        # Create edges
         edge_x = []
         edge_y = []
         for ((i1, j1), (i2, j2)) in self.edges:
@@ -43,10 +44,8 @@ class BinomialTreePlotter(BasePlotter):
         # Create shapes where the prices are going to be displayed
         shapes = self._create_shapes()
 
-        # Plot
         fig = go.Figure()
 
-        # Add edges
         fig.add_trace(go.Scatter(
             x=edge_x, y=edge_y,
             mode='lines',
@@ -55,7 +54,6 @@ class BinomialTreePlotter(BasePlotter):
             hoverinfo='none'
         ))
 
-        # Asset price values
         fig.add_trace(go.Scatter(
             x=x, y=y_asset_prices,
             mode='text',
@@ -66,7 +64,6 @@ class BinomialTreePlotter(BasePlotter):
             textfont=dict(color="white")
         ))
 
-        # Option prices
         fig.add_trace(go.Scatter(
             x=x, y=y_option_price,
             mode='text',
@@ -93,7 +90,7 @@ class BinomialTreePlotter(BasePlotter):
         fig.update_yaxes(range=[-3, 3])
         return fig
 
-    def _build_nodes_and_edges(self):
+    def _build_nodes_and_edges(self) -> None:
         self.asset_prices_nodes = []
         self.option_prices_nodes = []
         self.edges = []
@@ -108,7 +105,7 @@ class BinomialTreePlotter(BasePlotter):
                     if j < i:
                         self.edges.append(((i - 1, j), (i, j)))
 
-    def _create_shapes(self):
+    def _create_shapes(self) -> List[Dict]:
         shapes = []
 
         for (i, j, _) in self.asset_prices_nodes:

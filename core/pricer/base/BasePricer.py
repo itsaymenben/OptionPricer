@@ -15,7 +15,7 @@ class BasePricer:
                  foreign_risk_free_rate: float = 0,     # rf
                  *args,
                  **kwargs,
-                 ):
+                 ) -> None:
 
         self.start_price = start_price
         self.time_to_maturity = time_to_maturity

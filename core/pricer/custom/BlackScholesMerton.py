@@ -2,13 +2,14 @@ import numpy as np
 from scipy.stats import norm
 from core.pricer.base.BasePricer import BasePricer
 from core.utilities.functions import derivative_cdf
+from typing import Tuple
 
 class BlackScholesMertonPricer(BasePricer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.asset_yield = self._compute_asset_yield()
 
-    def run(self):
+    def run(self) -> Tuple[float, float, float, float, float, float]:
         delta = self._compute_delta(self.start_price,
                                    self.strike_price,
                                    self.risk_free_rate,
@@ -52,36 +53,43 @@ class BlackScholesMertonPricer(BasePricer):
                                    self.call_option)
         return price, delta, gamma, theta, vega, rho
 
-    def compute_implied_volatility(self, option_price, tol=1e-4, max_iter=1000):
+    def compute_implied_volatility(self, option_price: float, tol:float = 1e-4, max_iter: int = 1000) -> float:
         upper_sigma = 3
         lower_sigma = 0.001
         computed_option_price = - np.inf
-        iter_count = 0
-        while abs(option_price - computed_option_price) > tol and iter_count < max_iter:
-            sigma = (upper_sigma + lower_sigma) / 2
-            computed_option_price = self._compute_price(self.start_price,
-                                                        self.strike_price,
-                                                        self.risk_free_rate,
-                                                        self.asset_yield,
-                                                        sigma,
-                                                        self.time_to_maturity,
-                                                        self.call_option)
+        sigma: float = (upper_sigma + lower_sigma) / 2
+
+        for _ in range(max_iter):
+            computed_option_price = self._compute_price(
+                self.start_price,
+                self.strike_price,
+                self.risk_free_rate,
+                self.asset_yield,
+                sigma,
+                self.time_to_maturity,
+                self.call_option,
+            )
+
+            if abs(option_price - computed_option_price) <= tol:
+                break
+
             if computed_option_price <= option_price:
                 lower_sigma = sigma
             else:
                 upper_sigma = sigma
-            iter_count += 1
+
+            sigma = (upper_sigma + lower_sigma) / 2
         self.volatility = sigma
         return round(sigma * 100, 4)
 
     def _compute_price(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity,
-                       call_option):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float,
+                       call_option: bool) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -91,13 +99,13 @@ class BlackScholesMertonPricer(BasePricer):
         return self._compute_put_price(d1, d2)
 
     def _compute_delta(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity,
-                       call_option):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float,
+                       call_option: bool) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -106,12 +114,12 @@ class BlackScholesMertonPricer(BasePricer):
         return delta_call if call_option else delta_put
 
     def _compute_gamma(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -119,13 +127,13 @@ class BlackScholesMertonPricer(BasePricer):
         return gamma
 
     def _compute_theta(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity,
-                       call_option):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float,
+                       call_option: bool) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -139,12 +147,12 @@ class BlackScholesMertonPricer(BasePricer):
         return theta_call if call_option else theta_put
 
     def _compute_vega(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -152,14 +160,14 @@ class BlackScholesMertonPricer(BasePricer):
         return vega
 
     def _compute_rho(self,
-                       start_price,
-                       strike_price,
-                       risk_free_rate,
-                       asset_yield,
-                       volatility,
-                       time_to_maturity,
-                       call_option,
-                       asset_type):
+                       start_price: float,
+                       strike_price: float,
+                       risk_free_rate: float,
+                       asset_yield: float,
+                       volatility: float,
+                       time_to_maturity: float,
+                       call_option: bool,
+                       asset_type: str) -> float:
         d1 = ((np.log(start_price / strike_price) 
               + (risk_free_rate - asset_yield + volatility ** 2 / 2) * time_to_maturity) 
               / (volatility * np.sqrt(time_to_maturity)))
@@ -181,7 +189,7 @@ class BlackScholesMertonPricer(BasePricer):
                                    call_option)
         return - option_price * time_to_maturity
 
-    def _compute_asset_yield(self):
+    def _compute_asset_yield(self) -> float: # type: ignore
         if self.asset_type in ["Stock", "Index"]:
             return self.dividend_yield
         if self.asset_type == "Currency":
@@ -189,8 +197,8 @@ class BlackScholesMertonPricer(BasePricer):
         if self.asset_type == "Future":
             return self.risk_free_rate
 
-    def _compute_call_price(self, d1, d2):
+    def _compute_call_price(self, d1: float, d2: float) -> float:
         return self.start_price * np.exp(- self.asset_yield * self.time_to_maturity) * norm.cdf(d1) - self.strike_price * np.exp(- self.risk_free_rate * self.time_to_maturity) * norm.cdf(d2)
 
-    def _compute_put_price(self, d1, d2):
+    def _compute_put_price(self, d1: float, d2: float) -> float:
         return self.strike_price * np.exp(- self.risk_free_rate * self.time_to_maturity) * norm.cdf(- d2) - self.start_price * np.exp(- self.asset_yield * self.time_to_maturity) * norm.cdf(- d1)

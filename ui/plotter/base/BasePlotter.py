@@ -1,7 +1,7 @@
 class BasePlotter:
     def __init__(self,
                  results,
-                 volatility):
+                 volatility: float):
         self.results = results
         self.volatility = volatility
 

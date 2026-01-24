@@ -7,7 +7,7 @@ class Plotter:
     def __init__(self,
                  method: str,
                  *args,
-                 **kwargs):
+                 **kwargs) -> None:
         if not isinstance(method, str):
             raise TypeError(f"'method' argument should be of {str} type.")
         if not method in configData["methods"]:
@@ -22,5 +22,5 @@ class Plotter:
     def generate_plot(self):
         return self.plotter.generate_plot()
 
-    def explain(self, type):
+    def explain(self, type: str):
         return self.plotter.explain(type)

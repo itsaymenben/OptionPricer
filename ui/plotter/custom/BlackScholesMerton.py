@@ -2,12 +2,12 @@ import streamlit as st
 from ui.plotter.base.BasePlotter import BasePlotter
 
 class BlackScholesMertonPlotter(BasePlotter):
-    def __init__(self, asset_type, *args, **kwargs):
+    def __init__(self, asset_type: str, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.price, self.delta, self.gamma, self.theta, self.vega, self.rho = self.results
         self.asset_type = asset_type
 
-    def explain(self, type: str):
+    def explain(self, type: str) -> None:
         if type == "OptionPricer":
             st.write(f"The Black-Scholes-Method Model gives the price:\n")
             col1, col2, col3, col4, col5, col6 = st.columns(6)
@@ -57,5 +57,5 @@ class BlackScholesMertonPlotter(BasePlotter):
                 else:
                     st.error(f"**Implied Volatility**\n\n{round(self.volatility, 4)} %")
 
-    def generate_plot(self):
+    def generate_plot(self) -> None:
         return super().generate_plot()

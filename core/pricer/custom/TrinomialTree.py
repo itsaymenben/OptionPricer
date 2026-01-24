@@ -1,5 +1,6 @@
 import numpy as np
 from core.pricer.base.BasePricer import BasePricer
+from typing import List, Tuple
 
 class TrinomialTreePricer(BasePricer):
     def __init__(self, *args, **kwargs):
@@ -12,15 +13,15 @@ class TrinomialTreePricer(BasePricer):
         self.sideways_probability = 2 / 3
         
 
-    def run(self):
+    def run(self) -> Tuple[List[List[float]], List[float]]:
         self.asset_prices = self._compute_asset_prices()
         self.option_prices = self._compute_option_prices(self.asset_prices)
         return self.asset_prices, self.option_prices
 
-    def compute_implied_volatility(self, option_price):
+    def compute_implied_volatility(self, option_price: float) -> None:
         super().compute_implied_volatility(option_price)
 
-    def _compute_asset_yield(self):
+    def _compute_asset_yield(self) -> float: # type: ignore
         if self.asset_type in ["Stock", "Index"]:
             return self.dividend_yield
         if self.asset_type == "Currency":
@@ -28,7 +29,7 @@ class TrinomialTreePricer(BasePricer):
         if self.asset_type == "Future":
             return self.risk_free_rate
 
-    def _compute_asset_prices(self):
+    def _compute_asset_prices(self) -> List[List[float]]:
         asset_prices = [[self.start_price]]
         for i in range(self.n_steps):
             current_step = []
@@ -42,7 +43,7 @@ class TrinomialTreePricer(BasePricer):
             asset_prices.append(current_step)
         return asset_prices
 
-    def _compute_option_prices(self, asset_prices):
+    def _compute_option_prices(self, asset_prices: List[List[float]]) -> List[float]:
         option_prices = []
         reverse_asset_prices = asset_prices[::-1]
         call_option_coeff = 1 if self.call_option else -1
@@ -66,7 +67,10 @@ class TrinomialTreePricer(BasePricer):
             option_prices.append(current_option_prices)
         return option_prices[::-1]          # Reverse the array to match the asset_prices arrays
 
-    def _compute_discounted_price_expectation(self, previous_upper_price, previous_mid_price, previous_lower_price):
+    def _compute_discounted_price_expectation(self,
+                                              previous_upper_price: float,
+                                              previous_mid_price: float,
+                                              previous_lower_price: float) -> float:
         p_up = self.increase_probability
         p_mid = self.sideways_probability
         p_down = self.decrease_probability

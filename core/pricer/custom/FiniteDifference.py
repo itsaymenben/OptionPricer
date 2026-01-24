@@ -1,5 +1,6 @@
 import numpy as np
 from core.pricer.base.BasePricer import BasePricer
+from numpy.typing import NDArray
 
 class FiniteDifference(BasePricer):
     def __init__(self,
@@ -16,7 +17,7 @@ class FiniteDifference(BasePricer):
         self.space_step = self.max_price / self.nb_space_steps
         self.asset_yield = self._compute_asset_yield()
 
-    def run(self):
+    def run(self) -> NDArray:
         K = self.strike_price
         r = self.risk_free_rate
         q = self.asset_yield
@@ -40,7 +41,8 @@ class FiniteDifference(BasePricer):
                     price_array[:, step] = np.maximum(early_exercise, price_array[:, step])
                 price_array[0, step] = max(call_option_coeff * (0 * dS - K), 0)
                 price_array[M, step] = max(call_option_coeff * (M * dS - K), 0)
-        return price_array
+            return price_array
+        raise ValueError("Only 'EXPLICIT' finite difference method is implemented.")
 
     def _compute_asset_yield(self) -> float: # type: ignore
         if self.asset_type in ["Stock", "Index"]:

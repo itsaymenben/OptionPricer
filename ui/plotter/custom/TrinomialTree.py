@@ -1,19 +1,20 @@
 import plotly.graph_objects as go
 import streamlit as st
 from ui.plotter.base.BasePlotter import BasePlotter
+from typing import List, Dict
 
 class TrinomialTreePlotter(BasePlotter):
     NODE_WIDTH = 0.38
     NODE_HEIGHT = 0.28
     NODE_OFFSET = 0.15
 
-    def __init__(self, n_steps, *args, **kwargs):
+    def __init__(self, n_steps: int, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.asset_prices, self.option_prices = self.results
         self.n_steps = n_steps
         self._build_nodes_and_edges()
 
-    def explain(self, type: str):
+    def explain(self, type: str) -> None:
         if type == "OptionPricer":
             price = self.option_prices[0][0]
             st.write(f"The Trinomial Tree Model gives the price:\n")
@@ -24,7 +25,7 @@ class TrinomialTreePlotter(BasePlotter):
                 else:
                     st.error(f"**PUT Value**\n\n{round(price, 4)}€")
 
-    def generate_plot(self):
+    def generate_plot(self) -> go.Figure:
         if self.n_steps > 5:
             st.info("You can use the Pan/Autoscale tools from Plotly to see the whole tree.")
         # Convert nodes to coordinates
@@ -93,7 +94,7 @@ class TrinomialTreePlotter(BasePlotter):
         fig.update_yaxes(range=[-5.5, 5.5])
         return fig
 
-    def _build_nodes_and_edges(self):
+    def _build_nodes_and_edges(self) -> None:
         self.asset_prices_nodes = []
         self.option_prices_nodes = []
         self.edges = []
@@ -107,7 +108,7 @@ class TrinomialTreePlotter(BasePlotter):
                     self.edges.append(((i, j), (i + 1, j)))
                     self.edges.append(((i, j), (i + 1, j + 1)))
 
-    def _create_shapes(self):
+    def _create_shapes(self) -> List[Dict]:
         shapes = []
 
         for (i, j, _) in self.asset_prices_nodes:

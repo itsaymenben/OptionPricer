@@ -8,7 +8,7 @@ class Pricer:
     def __init__(self,
                  method: str,
                  *args,
-                 **kwargs):
+                 **kwargs) -> None:
         if not isinstance(method, str):
             raise TypeError(f"'method' argument should be of {str} type.")
         if not method in configData["methods"]:
@@ -25,5 +25,5 @@ class Pricer:
     def run(self):
         return self.pricer.run()
 
-    def compute_implied_volatility(self, option_price):
+    def compute_implied_volatility(self, option_price: float):
         return self.pricer.compute_implied_volatility(option_price)

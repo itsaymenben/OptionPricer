@@ -1,8 +1,9 @@
 import numpy as np
 from core.pricer.base.BasePricer import BasePricer
+from typing import List, Tuple
 
 class BinomialTreePricer(BasePricer):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.percentage_increase, self.percentage_decrease = (np.exp(self.volatility * np.sqrt(self.timestep)),
                                                               np.exp(-self.volatility * np.sqrt(self.timestep)))
@@ -10,22 +11,22 @@ class BinomialTreePricer(BasePricer):
         self.increase_probability = ((self.risk_free_adjustment - self.percentage_decrease) 
                                      / (self.percentage_increase - self.percentage_decrease))
 
-    def run(self):
+    def run(self) -> Tuple[List[List[float]], List[float]]:
         self.asset_prices = self._compute_asset_prices()
         self.option_prices = self._compute_option_prices(self.asset_prices)
         return self.asset_prices, self.option_prices
 
-    def compute_implied_volatility(self, option_price):
+    def compute_implied_volatility(self, option_price: float) -> None:
         super().compute_implied_volatility(option_price)
 
-    def _compute_risk_free_adjustment(self):
+    def _compute_risk_free_adjustment(self) -> float:
         if self.asset_type in ["Stock", "Index"]:
             return np.exp((self.risk_free_rate - self.dividend_yield) * self.timestep)
         if self.asset_type == "Currency":
             return np.exp((self.risk_free_rate - self.foreign_risk_free_rate) * self.timestep)
         return 1
 
-    def _compute_asset_prices(self):
+    def _compute_asset_prices(self) -> List[List[float]]:
         asset_prices = [[self.start_price]]
         for i in range(self.n_steps):
             current_step = []
@@ -38,7 +39,7 @@ class BinomialTreePricer(BasePricer):
             asset_prices.append(current_step)
         return asset_prices
 
-    def _compute_option_prices(self, asset_prices):
+    def _compute_option_prices(self, asset_prices: List[List[float]]) -> List[float]:
         option_prices = []
         reverse_asset_prices = asset_prices[::-1]
         call_option_coeff = 1 if self.call_option else -1
@@ -61,7 +62,7 @@ class BinomialTreePricer(BasePricer):
             option_prices.append(current_option_prices)
         return option_prices[::-1]          # Reverse the array to match the asset_prices arrays
 
-    def _compute_discounted_price_expectation(self, previous_upper_price, previous_lower_price):
+    def _compute_discounted_price_expectation(self, previous_upper_price: float, previous_lower_price: float) -> float:
         p = self.increase_probability       # Risk-neutral probability
         r = self.risk_free_rate             # Interest rate
         dt = self.timestep                  # Timestep
